@@ -20,8 +20,11 @@ private:
 	bool m_enemyNeedMoveDown{ false };
 	float m_enemySPeed{ 1000.0f };
 	int m_totalScore{ 0 };
-	std::chrono::system_clock::time_point clock_start{ std::chrono::system_clock::now() };
-	std::chrono::system_clock::time_point clock_now{ std::chrono::system_clock::now() };
+	float m_projectileSpeed{200.0f};
+	float m_playerSpeed{30000.0f};
+	Uint64 clock_start{ SDL_GetTicks() };
+	Uint64 clock_now{ SDL_GetTicks() };
+	Uint64 m_sdlTicks{ SDL_GetTicksNS() };
 	Player* m_playerObject{};
 	GameObjectManager();
 	static GameObjectManager* m_gameObjectManagerInstance;
@@ -30,7 +33,7 @@ private:
 	void EnemyAIUpdate();
 	void CollisionUpdate();
 	void ProjectilePosUpdate();
-	float GetElapsedTime();
+	Uint64 GetElapsedTime();
 	bool checkCollision(const SDL_FRect* a, const SDL_FRect* b);
 public:
 	GameObjectManager(GameObjectManager&) = delete;

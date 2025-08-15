@@ -37,8 +37,8 @@ void GameObjectManager::EnemyAIUpdate()
 {
 	if (GetElapsedTime() >= m_enemySPeed)
 	{
-		clock_start = std::chrono::system_clock::now();
-		clock_now = std::chrono::system_clock::now();
+		clock_start = SDL_GetTicks();
+		clock_now = SDL_GetTicks();
 		
 		for (const auto& enemy : m_enemyObjectList)
 		{
@@ -68,7 +68,7 @@ void GameObjectManager::EnemyAIUpdate()
 	}
 	else
 	{
-		clock_now = std::chrono::system_clock::now();
+		clock_now = SDL_GetTicks();
 	}
 }
 
@@ -80,14 +80,14 @@ void GameObjectManager::MovePlayer(bool isLeft)
 		{
 			if (m_playerObject->GetDestPos()->x > 30.0f)
 			{
-				m_playerObject->GetDestPos()->x -= 0.1f;
+				m_playerObject->GetDestPos()->x -= m_playerSpeed * ((float)(SDL_GetTicksNS() - m_sdlTicks) / 1000000000.0f);
 			}
 		}
 		else
 		{
 			if (m_playerObject->GetDestPos()->x + 60 < (m_width - 30))
 			{
-				m_playerObject->GetDestPos()->x += 0.1f;
+				m_playerObject->GetDestPos()->x += m_playerSpeed * ((float)(SDL_GetTicksNS() - m_sdlTicks) / 1000000000.0f);
 			}
 		}
 	}
@@ -258,6 +258,7 @@ void GameObjectManager::Update()
 	EnemyAIUpdate();
 	ProjectilePosUpdate();
 	CollisionUpdate();
+	m_sdlTicks = SDL_GetTicksNS();
 }
 
 void GameObjectManager::CollisionUpdate()
@@ -308,7 +309,7 @@ void GameObjectManager::ProjectilePosUpdate()
 			}
 			else
 			{
-				projectile->GetDestPos()->y -= 0.05f;
+				projectile->GetDestPos()->y -= m_projectileSpeed * ((float)(SDL_GetTicksNS() - m_sdlTicks) / 1000000000.0f);
 			}
 		}
 		else
@@ -319,16 +320,16 @@ void GameObjectManager::ProjectilePosUpdate()
 			}
 			else
 			{
-				projectile->GetDestPos()->y += 0.05f;
+				projectile->GetDestPos()->y += m_projectileSpeed * ((float)(SDL_GetTicksNS() - m_sdlTicks) / 1000000000.0f);
 			}
 
 		}
 	}
 }
 
-float GameObjectManager::GetElapsedTime()
+Uint64 GameObjectManager::GetElapsedTime()
 {
-	return float(std::chrono::duration_cast <std::chrono::milliseconds> (clock_now - clock_start).count());
+	return clock_now - clock_start;
 }
 
 bool GameObjectManager::checkCollision(const SDL_FRect* a, const SDL_FRect* b)
