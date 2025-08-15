@@ -55,14 +55,14 @@ void InputManager::Update()
 		}
 		if (keyboardState[SDL_SCANCODE_A])
 		{
-			GameObjectManager::GetInstance()->MovePlayer(true);
+			GameObjectManager::GetInstance()->SetMovePlayer(true, true);
 		}
 		if (keyboardState[SDL_SCANCODE_S])
 		{
 		}
 		if (keyboardState[SDL_SCANCODE_D])
 		{
-			GameObjectManager::GetInstance()->MovePlayer(false);
+			GameObjectManager::GetInstance()->SetMovePlayer(true, false);
 		}
 		if (keyboardState[SDL_SCANCODE_SPACE])
 		{

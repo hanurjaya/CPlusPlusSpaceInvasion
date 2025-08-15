@@ -18,10 +18,12 @@ private:
 	bool m_needToRefreshList{ true };
 	bool m_isEnemyMoveLeft{ true };
 	bool m_enemyNeedMoveDown{ false };
+	bool m_needMovePlayer{ false };
+	bool m_isPlayerMoveLeft{ false };
 	float m_enemySPeed{ 1000.0f };
 	int m_totalScore{ 0 };
 	float m_projectileSpeed{200.0f};
-	float m_playerSpeed{30000.0f};
+	float m_playerSpeed{400.0f};
 	Uint64 clock_start{ SDL_GetTicks() };
 	Uint64 clock_now{ SDL_GetTicks() };
 	Uint64 m_sdlTicks{ SDL_GetTicksNS() };
@@ -35,6 +37,7 @@ private:
 	void ProjectilePosUpdate();
 	Uint64 GetElapsedTime();
 	bool checkCollision(const SDL_FRect* a, const SDL_FRect* b);
+	void MovePlayer();
 public:
 	GameObjectManager(GameObjectManager&) = delete;
 	void operator=(const GameObjectManager&) = delete;
@@ -42,7 +45,6 @@ public:
 	void SetRenderer(SDL_Renderer* renderer);
 	void AddGameObject(GameObject* gameObject);
 	std::vector<GameObject*> GetGameObjects();
-	void MovePlayer(bool isLeft);
 	void DestroyGameObject(GameObject* gameObject);
 	void DestroyAllGameObject();
 	bool TrySpawnProjectileFromPlayer();
@@ -52,5 +54,6 @@ public:
 	void DownEnemySPeed();
 	int GetTotalScore();
 	void Update();
+	void SetMovePlayer(bool isActive, bool isMoveLeft);
 };
 
